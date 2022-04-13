@@ -1,14 +1,6 @@
 import Foundation
 
-extension JsonParseObject {
-    static func parse(_ data: Any) throws -> JsonParseObject {
-        let name = "root"
-        guard let root = data as? [String: Any] else {
-            throw NotionSerializationError.missing(name)
-        }
-        return JsonParseObject(obj: root, path: [name])
-    }
-    
+public extension JsonParseObject {    
     func parseObject(name property: String) throws -> JsonParseObject {
         let path = self.path + [property]
         guard let obj = self.obj[property] as? [String: Any] else {

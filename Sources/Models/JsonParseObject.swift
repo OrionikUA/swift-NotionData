@@ -8,4 +8,12 @@ public struct JsonParseObject {
         self.obj = obj
         self.path = path
     }
+    
+    public init(_ data: Any) throws {
+        let name = "root"
+        guard let root = data as? [String: Any] else {
+            throw NotionSerializationError.missing(name)
+        }
+        self.init(obj: root, path: [name])
+    }
 }
