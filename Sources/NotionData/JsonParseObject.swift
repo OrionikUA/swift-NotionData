@@ -1,6 +1,6 @@
 import Foundation
 
-struct JsonParseObject {
+public struct JsonParseObject {
     let obj: [String: Any]
     let path: [String]
 }
