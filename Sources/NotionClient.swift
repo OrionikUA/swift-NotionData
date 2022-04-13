@@ -23,7 +23,7 @@ public class NotionClient {
         }
     }
     
-    func sendRequest<T>(url: String, parser: (Any) throws -> T, body: [String: Any]? = nil, httpMethod: HttpMethod = HttpMethod.Post) async throws -> T {
+    public func sendRequest<T>(url: String, parser: (Any) throws -> T, body: [String: Any]? = nil, httpMethod: HttpMethod = HttpMethod.Post) async throws -> T {
         let request = try self.createRequest(url: url, httpMethod: httpMethod, body: body)
         let urlSession = URLSession.shared
 
@@ -46,7 +46,7 @@ public class NotionClient {
         return obj
     }
     
-    func createRequest(url: String, httpMethod: HttpMethod = HttpMethod.Post, body bodyNil: [String: Any]? = nil) throws -> URLRequest {
+    public func createRequest(url: String, httpMethod: HttpMethod = HttpMethod.Post, body bodyNil: [String: Any]? = nil) throws -> URLRequest {
         let Url = String(format: url)
         guard let serviceUrl = URL(string: Url) else { throw NotionClientError.creatingRequestError(description: "Can not create url \(Url)") }
         var request = URLRequest(url: serviceUrl, timeoutInterval: timeout)
