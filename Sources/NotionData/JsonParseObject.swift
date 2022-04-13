@@ -1,6 +1,11 @@
 import Foundation
 
 public struct JsonParseObject {
-    let obj: [String: Any]
+    public let obj: [String: Any]
     let path: [String]
+    
+    public init(obj: [String: Any], path: [String]) {
+        self.obj = obj
+        self.path = path
+    }
 }
