@@ -23,4 +23,26 @@ public extension JsonParseObject {
         }
         return titleStr
     }
+    
+    func parseIntNumberProprty(columnName: String, canBeNil: Bool = true) throws -> Int? {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.number)) {
+                return nil
+            }
+        }
+        let number = try obj.parseInt(name: NotionNodes.number)
+        return number
+    }
+    
+    func parseDoubleNumberProprty(columnName: String, canBeNil: Bool = true) throws -> Double? {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.number)) {
+                return nil
+            }
+        }
+        let number = try obj.parseDouble(name: NotionNodes.number)
+        return number
+    }
 }
