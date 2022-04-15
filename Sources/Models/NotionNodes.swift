@@ -24,4 +24,9 @@ enum NotionNodes {
     static let status = "status"
     static let code = "code"
     static let message = "message"
+    static let people = "people"
+    static let createdTime = "created_time"
+    static let lastEditedTime = "last_edited_time"
+    static let createdBy = "created_by"
+    static let lastEditedBy = "last_edited_by"
 }

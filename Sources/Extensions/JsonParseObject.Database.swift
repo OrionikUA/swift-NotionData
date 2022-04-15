@@ -117,4 +117,15 @@ public extension JsonParseObject {
             return (start, end)
         }
     }
+    
+    func parsePersonProperty(columnName: String, minimumLength: Int = 0) throws -> [UUID] {
+        let obj = try self.parseObject(name: columnName)
+        let peoples = try obj.parseArray(name: NotionNodes.people, minCount: minimumLength)
+        var ids: [UUID] = []
+        for people in peoples {
+            let id = try people.parseUUID(name: NotionNodes.id)
+            ids.append(id)
+        }
+        return ids
+    }
 }
