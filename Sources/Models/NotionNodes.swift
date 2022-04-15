@@ -29,4 +29,7 @@ enum NotionNodes {
     static let lastEditedTime = "last_edited_time"
     static let createdBy = "created_by"
     static let lastEditedBy = "last_edited_by"
+    static let url = "url"
+    static let email = "email"
+    static let phone = "phone_number"
 }

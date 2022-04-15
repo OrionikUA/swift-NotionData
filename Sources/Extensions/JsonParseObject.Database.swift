@@ -128,4 +128,43 @@ public extension JsonParseObject {
         }
         return ids
     }
+    
+    func parseCheckboxProperty(columnName: String) throws -> Bool {
+        let obj = try self.parseObject(name: columnName)
+        let res = try obj.parseBool(name: NotionNodes.checkbox)
+        return res
+    }
+    
+    func parseUrlProperty(columnName: String, canBeNil: Bool = true) throws -> String? {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.url)) {
+                return nil
+            }
+        }
+        let res = try obj.parseString(name: NotionNodes.url)
+        return res
+    }
+    
+    func parseEmailProperty(columnName: String, canBeNil: Bool = true) throws -> String? {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.email)) {
+                return nil
+            }
+        }
+        let res = try obj.parseString(name: NotionNodes.email)
+        return res
+    }
+    
+    func parsePhoneProperty(columnName: String, canBeNil: Bool = true) throws -> String? {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.phone)) {
+                return nil
+            }
+        }
+        let res = try obj.parseString(name: NotionNodes.phone)
+        return res
+    }
 }
