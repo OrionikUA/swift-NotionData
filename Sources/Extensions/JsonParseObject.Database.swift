@@ -45,4 +45,35 @@ public extension JsonParseObject {
         let number = try obj.parseDouble(name: NotionNodes.number)
         return number
     }
+    
+    func parseSelectProprty<E: RawRepresentable>(columnName: String, canBeNil: Bool = true) throws -> E? where E.RawValue == String {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.select)) {
+                return nil
+            }
+        }
+        let select = try obj.parseObject(name: NotionNodes.select)
+        let name = try select.parseString(name: NotionNodes.name)
+        guard let value = E(rawValue: name) else {
+            let path = select.path + [NotionNodes.name] + [name]
+            throw NotionSerializationError.missing(path.joined(separator: "."))
+        }
+        return value
+    }
+    
+    func parseMultiSelect<E: RawRepresentable>(columnName: String, minimumLength: Int = 0) throws -> [E] where E.RawValue == String {
+        let obj = try self.parseObject(name: columnName)
+        let multiSelect = try obj.parseArray(name: NotionNodes.multiSelect, minCount: minimumLength)
+        var list: [E] = []
+        for item in multiSelect {
+            let name = try item.parseString(name: NotionNodes.name)
+            guard let value = E(rawValue: name) else {
+                let path = item.path + [NotionNodes.name] + [name]
+                throw NotionSerializationError.missing(path.joined(separator: "."))
+            }
+            list.append(value)
+        }
+        return list
+    }
 }
