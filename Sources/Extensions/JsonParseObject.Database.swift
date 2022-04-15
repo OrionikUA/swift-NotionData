@@ -24,7 +24,7 @@ public extension JsonParseObject {
         return titleStr
     }
     
-    func parseIntNumberProprty(columnName: String, canBeNil: Bool = true) throws -> Int? {
+    func parseIntNumberProperty(columnName: String, canBeNil: Bool = true) throws -> Int? {
         let obj = try self.parseObject(name: columnName)
         if (canBeNil) {
             if (obj.isNil(name: NotionNodes.number)) {
@@ -35,7 +35,7 @@ public extension JsonParseObject {
         return number
     }
     
-    func parseDoubleNumberProprty(columnName: String, canBeNil: Bool = true) throws -> Double? {
+    func parseDoubleNumberProperty(columnName: String, canBeNil: Bool = true) throws -> Double? {
         let obj = try self.parseObject(name: columnName)
         if (canBeNil) {
             if (obj.isNil(name: NotionNodes.number)) {
@@ -46,7 +46,7 @@ public extension JsonParseObject {
         return number
     }
     
-    func parseSelectProprty<E: RawRepresentable>(columnName: String, canBeNil: Bool = true) throws -> E? where E.RawValue == String {
+    func parseSelectProperty<E: RawRepresentable>(columnName: String, canBeNil: Bool = true) throws -> E? where E.RawValue == String {
         let obj = try self.parseObject(name: columnName)
         if (canBeNil) {
             if (obj.isNil(name: NotionNodes.select)) {
@@ -62,7 +62,7 @@ public extension JsonParseObject {
         return value
     }
     
-    func parseMultiSelect<E: RawRepresentable>(columnName: String, minimumLength: Int = 0) throws -> [E] where E.RawValue == String {
+    func parseMultiSelectProperty<E: RawRepresentable>(columnName: String, minimumLength: Int = 0) throws -> [E] where E.RawValue == String {
         let obj = try self.parseObject(name: columnName)
         let multiSelect = try obj.parseArray(name: NotionNodes.multiSelect, minCount: minimumLength)
         var list: [E] = []
@@ -75,5 +75,46 @@ public extension JsonParseObject {
             list.append(value)
         }
         return list
+    }
+    
+    func parseStartDateProperty(columnName: String, dateTime: Bool = false, canBeNil: Bool = true, timezone: TimeZone = TimeZone.current) throws -> Date? {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.date)) {
+                return nil
+            }
+        }
+        let date = try obj.parseObject(name: NotionNodes.date)
+        if (dateTime) {
+            let start = try date.parseDateTime(name: NotionNodes.start, timezone: timezone)
+            return start
+        } else {
+            let start = try date.parseDate(name: NotionNodes.start, timezone: timezone)
+            return start
+        }
+    }
+    
+    func parseDateProperty(columnName: String, dateTime: Bool = false, canBeNil: Bool = true, timezone: TimeZone = TimeZone.current) throws -> (Date, Date)? {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.date)) {
+                return nil
+            }
+        }
+        let date = try obj.parseObject(name: NotionNodes.date)
+        if (canBeNil) {
+            if (date.isNil(name: NotionNodes.end) || date.isNil(name: NotionNodes.start)) {
+                return nil
+            }
+        }
+        if (dateTime) {
+            let start = try date.parseDateTime(name: NotionNodes.start, timezone: timezone)
+            let end = try date.parseDateTime(name: NotionNodes.end, timezone: timezone)
+            return (start, end)
+        } else {
+            let start = try date.parseDate(name: NotionNodes.start, timezone: timezone)
+            let end = try date.parseDate(name: NotionNodes.end, timezone: timezone)
+            return (start, end)
+        }
     }
 }

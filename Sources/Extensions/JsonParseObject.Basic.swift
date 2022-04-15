@@ -77,14 +77,14 @@ public extension JsonParseObject {
         return res
     }
     
-    func parseDate(name property: String, isUtc: Bool = false) throws -> Date {
+    func parseDateTime(name property: String, timezone: TimeZone = TimeZone.current) throws -> Date {
         let path = self.path + [property]
         guard let text = self.obj[property] as? String else {
             throw NotionSerializationError.missing(path.joined(separator: "."))
         }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.000Z"
-        dateFormatter.timeZone = isUtc ? TimeZone.init(abbreviation: "UTC") : TimeZone.current
+        dateFormatter.timeZone = timezone
         dateFormatter.locale = Locale.current
         guard let date = dateFormatter.date(from:text) else {
             throw NotionSerializationError.missing(path.joined(separator: "."))
@@ -92,14 +92,14 @@ public extension JsonParseObject {
         return date
     }
     
-    func parseOnlyDate(name property: String) throws -> Date {
+    func parseDate(name property: String, timezone: TimeZone = TimeZone.current) throws -> Date {
         let path = self.path + [property]
         guard let text = self.obj[property] as? String else {
             throw NotionSerializationError.missing(path.joined(separator: "."))
         }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.timeZone = timezone
         dateFormatter.locale = Locale.current
         guard let date = dateFormatter.date(from:text) else {
             throw NotionSerializationError.missing(path.joined(separator: "."))

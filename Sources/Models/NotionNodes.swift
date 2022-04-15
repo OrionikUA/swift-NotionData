@@ -17,6 +17,7 @@ enum NotionNodes {
     static let multiSelect = "multi_select"
     static let date = "date"
     static let start = "start"
+    static let end = "end"
     static let relation = "relation"
     static let id = "id"
     static let object = "object"
