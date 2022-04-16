@@ -32,4 +32,7 @@ enum NotionNodes {
     static let url = "url"
     static let email = "email"
     static let phone = "phone_number"
+    static let files = "files"
+    static let file = "file"
+    static let external = "external"
 }

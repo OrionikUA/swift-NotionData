@@ -167,4 +167,24 @@ public extension JsonParseObject {
         let res = try obj.parseString(name: NotionNodes.phone)
         return res
     }
+    
+    func parseFilesProperty(columnName: String, minimumLength: Int = 0) throws -> [String] {
+        let obj = try self.parseObject(name: columnName)
+        var list: [String] = []
+        let files = try obj.parseArray(name: NotionNodes.files)
+        for file in files {
+            if (file.hasProperty(name: NotionNodes.file)) {
+                let fileObj = try file.parseObject(name: NotionNodes.file)
+                let url = try fileObj.parseString(name: NotionNodes.url)
+                list.append(url)
+            } else if (file.hasProperty(name: NotionNodes.external)) {
+                let fileObj = try file.parseObject(name: NotionNodes.external)
+                let url = try fileObj.parseString(name: NotionNodes.url)
+                list.append(url)
+            } else {
+                throw NotionSerializationError.missing(file.path.joined(separator: ".") + " not implemented file")
+            }
+        }
+        return list
+    }
 }
