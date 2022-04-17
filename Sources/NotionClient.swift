@@ -23,6 +23,55 @@ public class NotionClient {
         }
     }
     
+    static func parsePagination(data: Any) throws -> String? {
+        let root = try JsonParseObject(data)
+        if (root.isNil(name: NotionNodes.nextCursor)) {
+            return nil
+        }
+        let cursor = try root.parseString(name: NotionNodes.nextCursor)
+        return cursor
+    }
+    
+    public func sendPaginationPostRequest<T>(url: String, parser: (Any) throws -> [T], body: [String: Any]? = nil) async throws -> [T] {
+        
+        var list: [T] = []
+        var newBody: [String: Any] = body ?? [:]
+        
+        var cursor: String? = nil
+        repeat {
+            if let cursorNotNil = cursor {
+                let cBody: [String: Any] = [NotionNodes.startCursor: cursorNotNil]
+                newBody.merge(cBody) { (_, new) in new }
+            }
+            
+            let request = try self.createRequest(url: url, httpMethod: HttpMethod.Post, body: body)
+            let urlSession = URLSession.shared
+
+            var (data, _): (Data, URLResponse), json: Any, obj: [T]
+            
+            do { (data, _) = try await urlSession.data(for: request) }
+            catch { throw NotionClientError.internalClientError(description: error.localizedDescription) }
+            
+            do { json = try JSONSerialization.jsonObject(with: data, options: []) }
+            catch { throw NotionClientError.internalClientSerializationError(description: error.localizedDescription) }
+            
+            if let errorResponse = NotionClient.parseError(data: json) {
+                throw NotionClientError.errorResponse(description: errorResponse.description)
+            }
+            
+            do {
+                obj = try parser(json)
+                cursor = try NotionClient.parsePagination(data: json)
+            }
+            catch NotionSerializationError.missing(let path) { throw NotionClientError.jsonParserError(description: path) }
+            catch { throw NotionClientError.jsonParserError(description: error.localizedDescription) }
+            
+            list.append(contentsOf: obj)
+        } while (cursor == nil)
+        
+        return list
+    }
+    
     public func sendRequest<T>(url: String, parser: (Any) throws -> T, body: [String: Any]? = nil, httpMethod: HttpMethod = HttpMethod.Post) async throws -> T {
         let request = try self.createRequest(url: url, httpMethod: httpMethod, body: body)
         let urlSession = URLSession.shared

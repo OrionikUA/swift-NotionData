@@ -35,4 +35,6 @@ enum NotionNodes {
     static let files = "files"
     static let file = "file"
     static let external = "external"
+    static let startCursor = "start_cursor"
+    static let nextCursor = "next_cursor"
 }
