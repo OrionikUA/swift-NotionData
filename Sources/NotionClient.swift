@@ -67,7 +67,7 @@ public class NotionClient {
             catch { throw NotionClientError.jsonParserError(description: error.localizedDescription) }
             
             list.append(contentsOf: obj)
-        } while (cursor == nil)
+        } while (cursor != nil)
         
         return list
     }
