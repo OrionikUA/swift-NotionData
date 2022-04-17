@@ -316,7 +316,7 @@ public extension JsonParseObject {
         return res
     }
     
-    func parseFormulaStartDateProperty(columnName: String, timezone: TimeZone = TimeZone.current) throws -> Date? {
+    func parseFormulaStartDateProperty(columnName: String, timezone: TimeZone = TimeZone.current) throws -> Date {
         let obj = try self.parseObject(name: columnName)
         let formula = try obj.parseObject(name: NotionNodes.formula)
         let date = try formula.parseObject(name: NotionNodes.date)
