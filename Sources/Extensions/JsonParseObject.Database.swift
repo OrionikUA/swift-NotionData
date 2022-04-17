@@ -24,7 +24,7 @@ public extension JsonParseObject {
         return titleStr
     }
     
-    func parseIntNumberProperty(columnName: String, canBeNil: Bool = true) throws -> Int? {
+    func parseIntProperty(columnName: String, canBeNil: Bool = true) throws -> Int? {
         let obj = try self.parseObject(name: columnName)
         if (canBeNil) {
             if (obj.isNil(name: NotionNodes.number)) {
@@ -35,7 +35,7 @@ public extension JsonParseObject {
         return number
     }
     
-    func parseDoubleNumberProperty(columnName: String, canBeNil: Bool = true) throws -> Double? {
+    func parseDoubleProperty(columnName: String, canBeNil: Bool = true) throws -> Double? {
         let obj = try self.parseObject(name: columnName)
         if (canBeNil) {
             if (obj.isNil(name: NotionNodes.number)) {
@@ -62,9 +62,9 @@ public extension JsonParseObject {
         return value
     }
     
-    func parseMultiSelectProperty<E: RawRepresentable>(columnName: String, minimumLength: Int = 0) throws -> [E] where E.RawValue == String {
+    func parseMultiSelectProperty<E: RawRepresentable>(columnName: String, minimumLength: Int = 0, maximumLength: Int = Int.max) throws -> [E] where E.RawValue == String {
         let obj = try self.parseObject(name: columnName)
-        let multiSelect = try obj.parseArray(name: NotionNodes.multiSelect, minCount: minimumLength)
+        let multiSelect = try obj.parseArray(name: NotionNodes.multiSelect, minCount: minimumLength, maxCount: maximumLength)
         var list: [E] = []
         for item in multiSelect {
             let name = try item.parseString(name: NotionNodes.name)
@@ -118,9 +118,9 @@ public extension JsonParseObject {
         }
     }
     
-    func parsePersonProperty(columnName: String, minimumLength: Int = 0) throws -> [UUID] {
+    func parsePersonProperty(columnName: String, minimumLength: Int = 0, maximumLength: Int = Int.max) throws -> [UUID] {
         let obj = try self.parseObject(name: columnName)
-        let peoples = try obj.parseArray(name: NotionNodes.people, minCount: minimumLength)
+        let peoples = try obj.parseArray(name: NotionNodes.people, minCount: minimumLength, maxCount: maximumLength)
         var ids: [UUID] = []
         for people in peoples {
             let id = try people.parseUUID(name: NotionNodes.id)
@@ -168,10 +168,10 @@ public extension JsonParseObject {
         return res
     }
     
-    func parseFilesProperty(columnName: String, minimumLength: Int = 0) throws -> [String] {
+    func parseFilesProperty(columnName: String, minimumLength: Int = 0, maximumLength: Int = Int.max) throws -> [String] {
         let obj = try self.parseObject(name: columnName)
         var list: [String] = []
-        let files = try obj.parseArray(name: NotionNodes.files)
+        let files = try obj.parseArray(name: NotionNodes.files, minCount: minimumLength, maxCount: maximumLength)
         for file in files {
             if (file.hasProperty(name: NotionNodes.file)) {
                 let fileObj = try file.parseObject(name: NotionNodes.file)
@@ -186,5 +186,148 @@ public extension JsonParseObject {
             }
         }
         return list
+    }
+    
+    func parseRelations(columnName: String, minimumLength: Int = 0, maximumLength: Int = Int.max) throws -> [String] {
+        let obj = try self.parseObject(name: columnName)
+        let relations = try obj.parseArray(name: NotionNodes.relation, minCount: minimumLength, maxCount: maximumLength)
+        var list: [String] = []
+        for relation in relations {
+            let id = try relation.parseString(name: NotionNodes.id)
+            list.append(id)
+        }
+        return list
+    }
+    
+    func parseRollupIntArrayProperty(columnName: String, minimumLength: Int = 0, maximumLengrh: Int = Int.max) throws -> [Int] {
+        var list:[Int] = []
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        let array = try rollup.parseArray(name: NotionNodes.array, minCount: minimumLength, maxCount: maximumLengrh)
+        for item in array {
+            let num = try item.parseInt(name: NotionNodes.number)
+            list.append(num)
+        }
+        return list
+    }
+    
+    func parseRollupDoubleArrayProperty(columnName: String, minimumLength: Int = 0, maximumLengrh: Int = Int.max) throws -> [Double] {
+        var list:[Double] = []
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        let array = try rollup.parseArray(name: NotionNodes.array, minCount: minimumLength, maxCount: maximumLengrh)
+        for item in array {
+            let num = try item.parseDouble(name: NotionNodes.number)
+            list.append(num)
+        }
+        return list
+    }
+    
+    func parseRollupIntProperty(columnName: String, canBeNil: Bool = true) throws -> Int? {
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        if (canBeNil) {
+            if (rollup.isNil(name: NotionNodes.number)) {
+                return nil
+            }
+        }
+        let number = try rollup.parseInt(name: NotionNodes.number)
+        return number
+    }
+    
+    func parseRollupDoubleProperty(columnName: String, canBeNil: Bool = true) throws -> Double? {
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        if (canBeNil) {
+            if (rollup.isNil(name: NotionNodes.number)) {
+                return nil
+            }
+        }
+        let number = try rollup.parseDouble(name: NotionNodes.number)
+        return number
+    }
+    
+    func parseRollupCheckboxArrayProperty(columnName: String, minimumLength: Int = 0, maximumLengrh: Int = Int.max) throws -> [Bool] {
+        var list:[Bool] = []
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        let array = try rollup.parseArray(name: NotionNodes.array, minCount: minimumLength, maxCount: maximumLengrh)
+        for item in array {
+            let check = try item.parseBool(name: NotionNodes.checkbox)
+            list.append(check)
+        }
+        return list
+    }
+    
+    func parseRollupTextArrayProperty(columnName: String, minimumLength: Int = 0, maximumLengrh: Int = Int.max) throws -> [String] {
+        var list:[String] = []
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        let array = try rollup.parseArray(name: NotionNodes.array, minCount: minimumLength, maxCount: maximumLengrh)
+        for item in array {
+            let richTexts = try item.parseArray(name: NotionNodes.richText)
+            var titleStr: String = ""
+            for richText in richTexts {
+                let text = try richText.parseString(name: NotionNodes.plainText)
+                titleStr = titleStr + text
+            }
+            list.append(titleStr)
+        }
+        return list
+    }
+    
+    func parseRollupDateProperty(columnName: String, canBeNil: Bool = true, timezone: TimeZone = TimeZone.current) throws -> (Date, Date)? {
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        if (canBeNil) {
+            if (rollup.isNil(name: NotionNodes.date)) {
+                return nil
+            }
+        }
+        let date = try rollup.parseObject(name: NotionNodes.date)
+        if (canBeNil) {
+            if (date.isNil(name: NotionNodes.end) || date.isNil(name: NotionNodes.start)) {
+                return nil
+            }
+        }
+        let start = try date.parseDateTime(name: NotionNodes.start, timezone: timezone)
+        let end = try date.parseDateTime(name: NotionNodes.end, timezone: timezone)
+        return (start, end)
+    }
+    
+    func parseFormulaIntProperty(columnName: String) throws -> Int {
+        let obj = try self.parseObject(name: columnName)
+        let formula = try obj.parseObject(name: NotionNodes.formula)
+        let number = try formula.parseInt(name: NotionNodes.number)
+        return number
+    }
+    
+    func parseFormulaDoubleProperty(columnName: String) throws -> Double {
+        let obj = try self.parseObject(name: columnName)
+        let formula = try obj.parseObject(name: NotionNodes.formula)
+        let number = try formula.parseDouble(name: NotionNodes.number)
+        return number
+    }
+    
+    func parseFormulaCheckboxProperty(columnName: String) throws -> Bool {
+        let obj = try self.parseObject(name: columnName)
+        let formula = try obj.parseObject(name: NotionNodes.formula)
+        let res = try formula.parseBool(name: NotionNodes.checkbox)
+        return res
+    }
+    
+    func parseFormulaStartDateProperty(columnName: String, timezone: TimeZone = TimeZone.current) throws -> Date? {
+        let obj = try self.parseObject(name: columnName)
+        let formula = try obj.parseObject(name: NotionNodes.formula)
+        let date = try formula.parseObject(name: NotionNodes.date)
+        let start = try date.parseDateTime(name: NotionNodes.start, timezone: timezone)
+        return start
+    }
+    
+    func parseFormulaTextProperty(columnName: String) throws -> String {
+        let obj = try self.parseObject(name: columnName)
+        let formula = try obj.parseObject(name: NotionNodes.formula)
+        let text = try formula.parseString(name: NotionNodes.string)
+        return text
     }
 }

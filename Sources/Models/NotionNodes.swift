@@ -37,4 +37,6 @@ enum NotionNodes {
     static let external = "external"
     static let startCursor = "start_cursor"
     static let nextCursor = "next_cursor"
+    static let array = "array"
+    static let string = "string"
 }
