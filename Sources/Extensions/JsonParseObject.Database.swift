@@ -312,7 +312,7 @@ public extension JsonParseObject {
     func parseFormulaCheckboxProperty(columnName: String) throws -> Bool {
         let obj = try self.parseObject(name: columnName)
         let formula = try obj.parseObject(name: NotionNodes.formula)
-        let res = try formula.parseBool(name: NotionNodes.checkbox)
+        let res = try formula.parseBool(name: NotionNodes.boolean)
         return res
     }
     
