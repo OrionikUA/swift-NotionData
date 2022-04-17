@@ -44,7 +44,7 @@ public class NotionClient {
                 newBody.merge(cBody) { (_, new) in new }
             }
             
-            let request = try self.createRequest(url: url, httpMethod: HttpMethod.Post, body: body)
+            let request = try self.createRequest(url: url, httpMethod: HttpMethod.Post, body: newBody)
             let urlSession = URLSession.shared
 
             var (data, _): (Data, URLResponse), json: Any, obj: [T]
