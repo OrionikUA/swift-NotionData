@@ -1,6 +1,6 @@
 
 import Foundation
 
-struct PatchPropertyModel<T: Encodable>: Encodable {
-    let value: T
+public struct PatchPropertyModel<T: Encodable>: Encodable {
+    public let value: T
 }
