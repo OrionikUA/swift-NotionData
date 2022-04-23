@@ -13,7 +13,7 @@ class NotionBodyCreator {
         return body
     }
     
-    static func createDatabaseRecordAdd(changes: [NotionDatabaseColumnChange], databaseId: String) -> [String: Any] {
+    static func createDatabaseRecordAdd(databaseId: String, changes: [NotionDatabaseColumnChange]) -> [String: Any] {
         var body: [String: Any] = [:]
         body.merge(NotionBodyCreator.createParentDatabaseValue(databaseId: databaseId)) { (_, new) in new }
         var changesList: [[String: Any]] = []
