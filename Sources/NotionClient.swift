@@ -114,4 +114,26 @@ public class NotionClient {
         }
         return request
     }
+    
+    public func sendRequest(url: String, body: [String: Any]? = nil, httpMethod: HttpMethod = HttpMethod.Post) async throws {
+        let request = try self.createRequest(url: url, httpMethod: httpMethod, body: body)
+        let urlSession = URLSession.shared
+
+        var (data, _): (Data, URLResponse), json: Any
+        
+        do { (data, _) = try await urlSession.data(for: request) }
+        catch { throw NotionClientError.internalClientError(description: error.localizedDescription) }
+        
+        do { json = try JSONSerialization.jsonObject(with: data, options: []) }
+        catch { throw NotionClientError.internalClientSerializationError(description: error.localizedDescription) }
+        
+        if let errorResponse = NotionClient.parseError(data: json) {
+            throw NotionClientError.errorResponse(description: errorResponse.description)
+        }
+    }
+    
+    public func delete(block: String) async throws {
+        let url = UrlConstants.createBlocksIdUrl(id: block)
+        try await sendRequest(url: url, httpMethod: HttpMethod.Delete)
+    }
 }
