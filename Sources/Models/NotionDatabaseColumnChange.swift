@@ -36,12 +36,12 @@ public struct NotionDatabaseColumnChange {
         return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.select, columnName: columnName, text: value)
     }
     
-    public static func createInt(columnName: String, value: Int) -> NotionDatabaseColumnChange {
-        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.numberInt, columnName: columnName, integer: value)
+    public static func createInt(columnName: String, value: Int?) -> NotionDatabaseColumnChange {
+        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.numberInt, columnName: columnName, integer: value != nil ? value! : 0, isNil: value == nil)
     }
     
-    public static func createDouble(columnName: String, value: Double) -> NotionDatabaseColumnChange {
-        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.numberDouble, columnName: columnName, double: value)
+    public static func createDouble(columnName: String, value: Double?) -> NotionDatabaseColumnChange {
+        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.numberDouble, columnName: columnName, double: value != nil ? value! : 0, isNil: value == nil)
     }
     
     public static func createStartDate(columnName: String, value: String = "", isNil: Bool = false) -> NotionDatabaseColumnChange {

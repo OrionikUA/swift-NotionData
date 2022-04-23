@@ -37,9 +37,9 @@ public class NotionBodyCreator {
         case .select:
             obj = createDatabaseSelect(name: change.columnName, value: change.text)
         case .numberInt:
-            obj = createDatabaseNumberInt(name: change.columnName, value: change.integer)
+            obj = createDatabaseNumberInt(name: change.columnName, value: change.isNil ? nil : change.integer)
         case .numberDouble:
-            obj = createDatabaseNumberDouble(name: change.columnName, value: change.double)
+            obj = createDatabaseNumberDouble(name: change.columnName, value: change.isNil ? nil : change.double)
         case .startDate:
             obj = createDatabaseStartDate(name: change.columnName, value: change.isNil ? nil : change.text)
         }
@@ -114,7 +114,7 @@ public class NotionBodyCreator {
         ]
     }
     
-    public static func createDatabaseNumberInt(name: String, value: Int) -> [String: Any] {
+    public static func createDatabaseNumberInt(name: String, value: Int?) -> [String: Any] {
         return [name:
                     [
                         "number": value
@@ -122,7 +122,7 @@ public class NotionBodyCreator {
         ]
     }
     
-    public static func createDatabaseNumberDouble(name: String, value: Double) -> [String: Any] {
+    public static func createDatabaseNumberDouble(name: String, value: Double?) -> [String: Any] {
         return [name:
                     [
                         "number": value
