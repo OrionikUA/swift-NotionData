@@ -1,7 +1,7 @@
 
 import Foundation
 
-enum NotionDatabaseColumnType {
+public enum NotionDatabaseColumnType {
     case checkbox
     case title
     case text

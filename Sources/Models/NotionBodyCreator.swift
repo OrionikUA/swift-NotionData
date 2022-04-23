@@ -1,8 +1,8 @@
 import Foundation
 
-class NotionBodyCreator {
+public class NotionBodyCreator {
     
-    static func createDatabaseRecordChange(changes: [NotionDatabaseColumnChange]) -> [String: Any] {
+    public static func createDatabaseRecordChange(changes: [NotionDatabaseColumnChange]) -> [String: Any] {
         var body: [String: Any] = [:]
         var changesList: [[String: Any]] = []
         for change in changes {
@@ -13,7 +13,7 @@ class NotionBodyCreator {
         return body
     }
     
-    static func createDatabaseRecordAdd(databaseId: String, changes: [NotionDatabaseColumnChange]) -> [String: Any] {
+    public static func createDatabaseRecordAdd(databaseId: String, changes: [NotionDatabaseColumnChange]) -> [String: Any] {
         var body: [String: Any] = [:]
         body.merge(NotionBodyCreator.createParentDatabaseValue(databaseId: databaseId)) { (_, new) in new }
         var changesList: [[String: Any]] = []
@@ -25,7 +25,7 @@ class NotionBodyCreator {
         return body
     }
     
-    static func createDatabaseColumnChange(change: NotionDatabaseColumnChange) -> [String: Any] {
+    public static func createDatabaseColumnChange(change: NotionDatabaseColumnChange) -> [String: Any] {
         var obj:[String: Any]
         switch (change.columnType) {
         case .checkbox:
@@ -46,7 +46,7 @@ class NotionBodyCreator {
         return obj
     }
     
-    static func createParentDatabaseValue(databaseId: String) -> [String: Any] {
+    public static func createParentDatabaseValue(databaseId: String) -> [String: Any] {
         return ["parent": createDattabaseIdValue(id: databaseId)]
     }
     
@@ -54,7 +54,7 @@ class NotionBodyCreator {
         return ["database_id": id]
     }
     
-    static func createProperties(dict: [[String: Any]]) -> [String: Any] {
+    public static func createProperties(dict: [[String: Any]]) -> [String: Any] {
         var tmp: [String: Any] = [:]
         for item in dict {
             tmp.merge(item) { (_, new) in new }
@@ -62,7 +62,7 @@ class NotionBodyCreator {
         return ["properties": tmp]
     }
     
-    static func createDatabaseTitle(name: String, value: String) -> [String: Any] {
+    public static func createDatabaseTitle(name: String, value: String) -> [String: Any] {
         return [name:
                     [
                         "title":
@@ -73,7 +73,7 @@ class NotionBodyCreator {
         ]
     }
     
-    static func createDatabaseText(name: String, value: String) -> [String: Any] {
+    public static func createDatabaseText(name: String, value: String) -> [String: Any] {
         return [name:
                     [
                         "rich_text":
@@ -84,7 +84,7 @@ class NotionBodyCreator {
         ]
     }
     
-    static func createDatabaseSelect(name: String, value: String) -> [String: Any] {
+    public static func createDatabaseSelect(name: String, value: String) -> [String: Any] {
         return [name:
                     [
                         "select":
@@ -95,7 +95,7 @@ class NotionBodyCreator {
         ]
     }
     
-    static func createDatabaseCheckbox(name: String, value: Bool) -> [String: Any] {
+    public static func createDatabaseCheckbox(name: String, value: Bool) -> [String: Any] {
         return [name:
                     [
                         "checkbox": value
@@ -103,7 +103,7 @@ class NotionBodyCreator {
         ]
     }
     
-    static func createDatabaseReleation(name: String, value: String) -> [String: Any] {
+    public static func createDatabaseReleation(name: String, value: String) -> [String: Any] {
         return [name:
                     [
                         "relation":
@@ -114,7 +114,7 @@ class NotionBodyCreator {
         ]
     }
     
-    static func createDatabaseNumberInt(name: String, value: Int) -> [String: Any] {
+    public static func createDatabaseNumberInt(name: String, value: Int) -> [String: Any] {
         return [name:
                     [
                         "number": value
@@ -122,7 +122,7 @@ class NotionBodyCreator {
         ]
     }
     
-    static func createDatabaseNumberDouble(name: String, value: Double) -> [String: Any] {
+    public static func createDatabaseNumberDouble(name: String, value: Double) -> [String: Any] {
         return [name:
                     [
                         "number": value
@@ -130,7 +130,7 @@ class NotionBodyCreator {
         ]
     }
     
-    static func createDatabaseStartDate(name: String, value: String?) -> [String: Any] {
+    public static func createDatabaseStartDate(name: String, value: String?) -> [String: Any] {
         return [name:
                     [
                         "date": ["start": value]
