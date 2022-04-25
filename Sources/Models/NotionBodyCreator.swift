@@ -36,12 +36,16 @@ public class NotionBodyCreator {
             obj = createDatabaseText(name: change.columnName, value: change.text)
         case .select:
             obj = createDatabaseSelect(name: change.columnName, value: change.text)
+        case .multiSelect:
+            obj = createDatabaseMultiSelect(name: change.columnName, value: change.arrayStr)
         case .numberInt:
             obj = createDatabaseNumberInt(name: change.columnName, value: change.isNil ? nil : change.integer)
         case .numberDouble:
             obj = createDatabaseNumberDouble(name: change.columnName, value: change.isNil ? nil : change.double)
         case .startDate:
             obj = createDatabaseStartDate(name: change.columnName, value: change.isNil ? nil : change.text)
+        case .relations:
+            obj = createDatabaseReleations(name: change.columnName, value: change.arrayStr)
         }
         return obj
     }
@@ -84,6 +88,15 @@ public class NotionBodyCreator {
         ]
     }
     
+    public static func createDatabaseMultiSelect(name: String, value: [String]) -> [String: Any] {
+        let list = value.map({["name": $0]})
+        return [name:
+                    [
+                        "multi_select": list
+                    ]
+        ]
+    }
+    
     public static func createDatabaseSelect(name: String, value: String) -> [String: Any] {
         return [name:
                     [
@@ -103,13 +116,11 @@ public class NotionBodyCreator {
         ]
     }
     
-    public static func createDatabaseReleation(name: String, value: String) -> [String: Any] {
+    public static func createDatabaseReleations(name: String, value: [String]) -> [String: Any] {
+        let list = value.map({["id": $0]})
         return [name:
                     [
-                        "relation":
-                            [
-                                ["id": value]
-                            ]
+                        "relation": list
                     ]
         ]
     }

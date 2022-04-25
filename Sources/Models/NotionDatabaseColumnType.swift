@@ -6,7 +6,9 @@ public enum NotionDatabaseColumnType {
     case title
     case text
     case select
+    case multiSelect
     case numberInt
     case numberDouble
     case startDate
+    case relations
 }

@@ -7,9 +7,10 @@ public struct NotionDatabaseColumnChange {
     public let integer: Int
     public let double: Double
     public let bool: Bool
+    public let arrayStr: [String]
     public let isNil: Bool
     
-    public init(columnType: NotionDatabaseColumnType, columnName: String, text: String = "", integer: Int = 0, double: Double = 0.0, bool: Bool = false, isNil: Bool = false)
+    public init(columnType: NotionDatabaseColumnType, columnName: String, text: String = "", integer: Int = 0, double: Double = 0.0, bool: Bool = false, arrayStr: [String] = [], isNil: Bool = false)
     {
         self.columnType = columnType
         self.columnName = columnName
@@ -17,7 +18,12 @@ public struct NotionDatabaseColumnChange {
         self.integer = integer
         self.double = double
         self.bool = bool
+        self.arrayStr = arrayStr
         self.isNil = isNil
+    }
+    
+    public static func createRelations(columnName: String, value: [String] = []) -> NotionDatabaseColumnChange {
+        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.relations, columnName: columnName, arrayStr: value)
     }
     
     public static func createCheckbox(columnName: String, value: Bool) -> NotionDatabaseColumnChange {
@@ -34,6 +40,10 @@ public struct NotionDatabaseColumnChange {
     
     public static func createSelect(columnName: String, value: String) -> NotionDatabaseColumnChange {
         return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.select, columnName: columnName, text: value)
+    }
+    
+    public static func createMultiSelect(columnName: String, value: [String]) -> NotionDatabaseColumnChange {
+        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.multiSelect, columnName: columnName, arrayStr: value)
     }
     
     public static func createInt(columnName: String, value: Int?) -> NotionDatabaseColumnChange {
