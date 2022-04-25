@@ -149,15 +149,15 @@ public class NotionBodyCreator {
         ]
     }
     
-    static func createFilter(filterContent: [String: Any]) -> [String: Any] {
+    public static func createFilter(filterContent: [String: Any]) -> [String: Any] {
         return ["filter": filterContent]
     }
     
-    static func createAndFilter(query: [[String: Any]]) -> [String: Any] {
+    public static func createAndFilter(query: [[String: Any]]) -> [String: Any] {
         return ["and": query]
     }
     
-    static func createCheckboxPropertyFilter(name: String, query: String, value: Bool) -> [String: Any] {
+    public static func createCheckboxPropertyFilter(name: String, query: String, value: Bool) -> [String: Any] {
         return [ "property": name,
                  "checkbox":
                     [
@@ -166,7 +166,7 @@ public class NotionBodyCreator {
         ]
     }
     
-    static func createTextPropertyFilter(name: String, type: String, query: String, text: String) -> [String: Any] {
+    public static func createTextPropertyFilter(name: String, type: String, query: String, text: String) -> [String: Any] {
         return [ "property": name,
                  type:
                     [
