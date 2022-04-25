@@ -1,6 +1,6 @@
 import Foundation
 
-extension UUID {
+public extension UUID {
     var notionId: String {
         self.uuidString.replacingOccurrences(of: "-", with: "").lowercased()
     }
