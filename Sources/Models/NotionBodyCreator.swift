@@ -157,11 +157,24 @@ public class NotionBodyCreator {
         return ["and": query]
     }
     
+    public static func createOrFilter(query: [[String: Any]]) -> [String: Any] {
+        return ["or": query]
+    }
+    
     public static func createCheckboxPropertyFilter(name: String, query: String, value: Bool) -> [String: Any] {
         return [ "property": name,
                  "checkbox":
                     [
                         query: value
+                    ]
+        ]
+    }
+    
+    public static func createDateDayPropertyFilter(name: String, query: String, date: Date) -> [String: Any] {
+        return [ "property": name,
+                 "date":
+                    [
+                        query: date.dayString
                     ]
         ]
     }
