@@ -170,6 +170,15 @@ public class NotionBodyCreator {
         ]
     }
     
+    public static func createRelationPropertyFilter(name: String, query: String, value: Any) -> [String: Any] {
+        return [ "property": name,
+                 "relation":
+                    [
+                        query: value
+                    ]
+        ]
+    }
+    
     public static func createDateDayPropertyFilter(name: String, query: String, date: Date) -> [String: Any] {
         return [ "property": name,
                  "date":
