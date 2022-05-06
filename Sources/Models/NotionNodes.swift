@@ -39,4 +39,6 @@ enum NotionNodes {
     static let nextCursor = "next_cursor"
     static let array = "array"
     static let string = "string"
+    static let icon = "icon"
+    static let emoji = "emoji"
 }
