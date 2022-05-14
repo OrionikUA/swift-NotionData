@@ -188,7 +188,7 @@ public extension JsonParseObject {
         return list
     }
     
-    func parseRelations(columnName: String, minimumLength: Int = 0, maximumLength: Int = Int.max) throws -> [String] {
+    func parseRelationsProperty(columnName: String, minimumLength: Int = 0, maximumLength: Int = Int.max) throws -> [String] {
         let obj = try self.parseObject(name: columnName)
         let relations = try obj.parseArray(name: NotionNodes.relation, minCount: minimumLength, maxCount: maximumLength)
         var list: [String] = []
