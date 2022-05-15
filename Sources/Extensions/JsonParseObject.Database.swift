@@ -193,7 +193,7 @@ public extension JsonParseObject {
         let relations = try obj.parseArray(name: NotionNodes.relation, minCount: minimumLength, maxCount: maximumLength)
         var list: [String] = []
         for relation in relations {
-            let id = try relation.parseString(name: NotionNodes.id)
+            let id = try relation.parseString(name: NotionNodes.id).replacingOccurrences(of: "-", with: "")
             list.append(id)
         }
         return list
