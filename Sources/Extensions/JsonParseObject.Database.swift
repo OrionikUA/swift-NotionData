@@ -199,6 +199,36 @@ public extension JsonParseObject {
         return list
     }
     
+    func parseRollupIntProperty(columnName: String, canBeNil: Bool = true) throws -> Int? {
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        if (canBeNil) {
+            if (rollup.isNil(name: NotionNodes.number)) {
+                return nil
+            }
+        }
+        let number = try rollup.parseInt(name: NotionNodes.number)
+        return number
+    }
+    
+    func parseRollupStartDateProperty(columnName: String, dateTime: Bool = false, canBeNil: Bool = true, timezone: TimeZone = TimeZone.current) throws -> Date? {
+        let obj = try self.parseObject(name: columnName)
+        let rollup = try obj.parseObject(name: NotionNodes.rollup)
+        if (canBeNil) {
+            if (rollup.isNil(name: NotionNodes.date)) {
+                return nil
+            }
+        }
+        let date = try rollup.parseObject(name: NotionNodes.date)
+        if (dateTime) {
+            let start = try date.parseDateTime(name: NotionNodes.start, timezone: timezone)
+            return start
+        } else {
+            let start = try date.parseDate(name: NotionNodes.start, timezone: timezone)
+            return start
+        }
+    }
+    
 //    func parseRollupIntArrayProperty(columnName: String, minimumLength: Int = 0, maximumLengrh: Int = Int.max) throws -> [Int] {
 //        var list:[Int] = []
 //        let obj = try self.parseObject(name: columnName)
@@ -223,17 +253,7 @@ public extension JsonParseObject {
 //        return list
 //    }
     
-//    func parseRollupIntProperty(columnName: String, canBeNil: Bool = true) throws -> Int? {
-//        let obj = try self.parseObject(name: columnName)
-//        let rollup = try obj.parseObject(name: NotionNodes.rollup)
-//        if (canBeNil) {
-//            if (rollup.isNil(name: NotionNodes.number)) {
-//                return nil
-//            }
-//        }
-//        let number = try rollup.parseInt(name: NotionNodes.number)
-//        return number
-//    }
+    
 //
 //    func parseRollupDoubleProperty(columnName: String, canBeNil: Bool = true) throws -> Double? {
 //        let obj = try self.parseObject(name: columnName)
