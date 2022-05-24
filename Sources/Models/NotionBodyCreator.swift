@@ -142,9 +142,10 @@ public class NotionBodyCreator {
     }
     
     public static func createDatabaseStartDate(name: String, value: String?) -> [String: Any] {
+        let start: [String: Any]? = (value != nil) ? (["start": value as Any]) : nil as [String: Any]?
         return [name:
                     [
-                        "date": ["start": value]
+                        "date": start
                     ]
         ]
     }
