@@ -150,6 +150,10 @@ public class NotionBodyCreator {
         ]
     }
     
+    public static func createFilterSort(filter: [String: Any], sort: [String: Any]) -> [String: Any] {
+        return filter.merging(sort) { (current, _) in current }
+    }
+    
     public static func createFilter(filterContent: [String: Any]) -> [String: Any] {
         return ["filter": filterContent]
     }
@@ -195,6 +199,17 @@ public class NotionBodyCreator {
                     [
                         query: text
                     ]
+        ]
+    }
+    
+    public static func createSort(query: [[String: Any]]) -> [String: Any] {
+        return [ "sort": query ]
+    }
+    
+    public static func createSortItem(name: String, isAscending: Bool) -> [String: Any] {
+        return [
+            "property": name,
+            "direction": isAscending ? "ascending" : "descending"
         ]
     }
 }
