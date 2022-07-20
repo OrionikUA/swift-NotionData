@@ -203,7 +203,7 @@ public class NotionBodyCreator {
     }
     
     public static func createSort(query: [[String: Any]]) -> [String: Any] {
-        return [ "sort": query ]
+        return [ "sorts": query ]
     }
     
     public static func createSortItem(name: String, isAscending: Bool) -> [String: Any] {
