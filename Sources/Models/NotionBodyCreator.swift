@@ -35,7 +35,7 @@ public class NotionBodyCreator {
         case .text:
             obj = createDatabaseText(name: change.columnName, value: change.text)
         case .select:
-            obj = createDatabaseSelect(name: change.columnName, value: change.text)
+            obj = createDatabaseSelect(name: change.columnName, value: change.isNil ? nil : change.text)
         case .multiSelect:
             obj = createDatabaseMultiSelect(name: change.columnName, value: change.arrayStr)
         case .numberInt:
@@ -97,13 +97,11 @@ public class NotionBodyCreator {
         ]
     }
     
-    public static func createDatabaseSelect(name: String, value: String) -> [String: Any] {
+    public static func createDatabaseSelect(name: String, value: String?) -> [String: Any] {
+        let res = (value != nil) ? ["name": value!] : nil as [String: Any]?
         return [name:
                     [
-                        "select":
-                            [
-                                "name": value
-                            ]
+                        "select": res
                     ]
         ]
     }

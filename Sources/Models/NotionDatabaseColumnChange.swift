@@ -38,8 +38,8 @@ public struct NotionDatabaseColumnChange {
         return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.text, columnName: columnName, text: value)
     }
     
-    public static func createSelect(columnName: String, value: String) -> NotionDatabaseColumnChange {
-        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.select, columnName: columnName, text: value)
+    public static func createSelect(columnName: String, value: String?) -> NotionDatabaseColumnChange {
+        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.select, columnName: columnName, text: value != nil ? value! : "", isNil: value == nil)
     }
     
     public static func createMultiSelect(columnName: String, value: [String]) -> NotionDatabaseColumnChange {
