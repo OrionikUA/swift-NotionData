@@ -20,7 +20,7 @@ public extension JsonParseObject {
         var previousWasLink = false
         for richText in richTexts {
             let text = try richText.parseString(name: NotionNodes.plainText)
-            if (isNil(name: NotionNodes.href)) {
+            if (richText.isNil(name: NotionNodes.href)) {
                 if (!(previousWasLink && text == " ")) {
                     titleStr = titleStr + text
                 }
@@ -38,7 +38,7 @@ public extension JsonParseObject {
         var dict: [String: String] = [:]
         for richText in richTexts {
             let text = try richText.parseString(name: NotionNodes.plainText)
-            if (!isNil(name: NotionNodes.href)) {
+            if (!richText.isNil(name: NotionNodes.href)) {
                 dict[text] = try richText.parseString(name: NotionNodes.href)
             }
         }
@@ -50,7 +50,7 @@ public extension JsonParseObject {
         let richTexts = try obj.parseArray(name: NotionNodes.title)
         var list: [String] = []
         for richText in richTexts {
-            if (!isNil(name: NotionNodes.href)) {
+            if (!richText.isNil(name: NotionNodes.href)) {
                 let href = try richText.parseString(name: NotionNodes.href)
                 list.append(href)
             }
@@ -77,7 +77,7 @@ public extension JsonParseObject {
         var previousWasLink = false
         for richText in richTexts {
             let text = try richText.parseString(name: NotionNodes.plainText)
-            if (isNil(name: NotionNodes.href)) {
+            if (richText.isNil(name: NotionNodes.href)) {
                 if (!(previousWasLink && text == " ")) {
                     titleStr = titleStr + text
                 }
@@ -95,7 +95,7 @@ public extension JsonParseObject {
         var dict: [String: String] = [:]
         for richText in richTexts {
             let text = try richText.parseString(name: NotionNodes.plainText)
-            if (!isNil(name: NotionNodes.href)) {
+            if (!richText.isNil(name: NotionNodes.href)) {
                 dict[text] = try richText.parseString(name: NotionNodes.href)
             }
         }
@@ -107,7 +107,7 @@ public extension JsonParseObject {
         let richTexts = try obj.parseArray(name: NotionNodes.richText)
         var list: [String] = []
         for richText in richTexts {
-            if (!isNil(name: NotionNodes.href)) {
+            if (!richText.isNil(name: NotionNodes.href)) {
                 let href = try richText.parseString(name: NotionNodes.href)
                 list.append(href)
             }
