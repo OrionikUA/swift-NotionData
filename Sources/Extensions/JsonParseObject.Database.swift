@@ -24,6 +24,51 @@ public extension JsonParseObject {
         return titleStr
     }
     
+    func parseTextPropertyWithoutLinks(columnName: String) throws -> String {
+        let obj = try self.parseObject(name: columnName)
+        let richTexts = try obj.parseArray(name: NotionNodes.richText)
+        var titleStr: String = ""
+        var previousWasLink = false
+        for richText in richTexts {
+            let text = try richText.parseString(name: NotionNodes.plainText)
+            if (isNil(name: NotionNodes.href)) {
+                if (!(previousWasLink && text == " ")) {
+                    titleStr = titleStr + text
+                }
+            }
+            else {
+                previousWasLink = true
+            }
+        }
+        return titleStr
+    }
+    
+    func parseTextLinksDict(columnName: String) throws -> [String: String] {
+        let obj = try self.parseObject(name: columnName)
+        let richTexts = try obj.parseArray(name: NotionNodes.richText)
+        var dict: [String: String] = [:]
+        for richText in richTexts {
+            let text = try richText.parseString(name: NotionNodes.plainText)
+            if (!isNil(name: NotionNodes.href)) {
+                dict[text] = try richText.parseString(name: NotionNodes.href)
+            }
+        }
+        return dict
+    }
+    
+    func parseTextLinks(columnName: String) throws -> [String] {
+        let obj = try self.parseObject(name: columnName)
+        let richTexts = try obj.parseArray(name: NotionNodes.richText)
+        var list: [String] = []
+        for richText in richTexts {
+            if (!isNil(name: NotionNodes.href)) {
+                let href = try richText.parseString(name: NotionNodes.href)
+                list.append(href)
+            }
+        }
+        return list
+    }
+    
     func parseIntProperty(columnName: String, canBeNil: Bool = true) throws -> Int? {
         let obj = try self.parseObject(name: columnName)
         if (canBeNil) {

@@ -41,4 +41,5 @@ public enum NotionNodes {
     public static let string = "string"
     public static let icon = "icon"
     public static let emoji = "emoji"
+    public static let href = "href"
 }
