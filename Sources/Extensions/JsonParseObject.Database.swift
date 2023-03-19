@@ -13,6 +13,51 @@ public extension JsonParseObject {
         return titleStr
     }
     
+    func parseTitlePropertyWithoutLinks(columnName: String) throws -> String {
+        let obj = try self.parseObject(name: columnName)
+        let richTexts = try obj.parseArray(name: NotionNodes.title)
+        var titleStr: String = ""
+        var previousWasLink = false
+        for richText in richTexts {
+            let text = try richText.parseString(name: NotionNodes.plainText)
+            if (isNil(name: NotionNodes.href)) {
+                if (!(previousWasLink && text == " ")) {
+                    titleStr = titleStr + text
+                }
+            }
+            else {
+                previousWasLink = true
+            }
+        }
+        return titleStr
+    }
+    
+    func parseTitleLinksDict(columnName: String) throws -> [String: String] {
+        let obj = try self.parseObject(name: columnName)
+        let richTexts = try obj.parseArray(name: NotionNodes.title)
+        var dict: [String: String] = [:]
+        for richText in richTexts {
+            let text = try richText.parseString(name: NotionNodes.plainText)
+            if (!isNil(name: NotionNodes.href)) {
+                dict[text] = try richText.parseString(name: NotionNodes.href)
+            }
+        }
+        return dict
+    }
+    
+    func parseTitleLinks(columnName: String) throws -> [String] {
+        let obj = try self.parseObject(name: columnName)
+        let richTexts = try obj.parseArray(name: NotionNodes.title)
+        var list: [String] = []
+        for richText in richTexts {
+            if (!isNil(name: NotionNodes.href)) {
+                let href = try richText.parseString(name: NotionNodes.href)
+                list.append(href)
+            }
+        }
+        return list
+    }
+    
     func parseTextProperty(columnName: String) throws -> String {
         let obj = try self.parseObject(name: columnName)
         let richTexts = try obj.parseArray(name: NotionNodes.richText)
@@ -23,6 +68,7 @@ public extension JsonParseObject {
         }
         return titleStr
     }
+    
     
     func parseTextPropertyWithoutLinks(columnName: String) throws -> String {
         let obj = try self.parseObject(name: columnName)
