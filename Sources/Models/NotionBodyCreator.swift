@@ -200,6 +200,17 @@ public class NotionBodyCreator {
         ]
     }
     
+    public static func createRollupIntPropertyFilter(name: String, query: String, number: Int) -> [String: Any] {
+        return [ "property": name,
+                 "rollup":
+                    [
+                        "number": [
+                            query: number
+                        ]
+                    ]
+        ]
+    }
+    
     public static func createSort(query: [[String: Any]]) -> [String: Any] {
         return [ "sorts": query ]
     }
