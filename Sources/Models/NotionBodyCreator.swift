@@ -200,6 +200,15 @@ public class NotionBodyCreator {
         ]
     }
     
+    public static func createBoolPropertyFilter(name: String, type: String, query: String, value: Bool) -> [String: Any] {
+        return [ "property": name,
+                 type:
+                    [
+                        query: value
+                    ]
+        ]
+    }
+    
     public static func createRollupIntPropertyFilter(name: String, query: String, number: Int) -> [String: Any] {
         return [ "property": name,
                  "rollup":

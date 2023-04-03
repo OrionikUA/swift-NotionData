@@ -42,4 +42,6 @@ public enum NotionNodes {
     public static let icon = "icon"
     public static let emoji = "emoji"
     public static let href = "href"
+    public static let isEmpty = "is_empty"
+    public static let isNotEmpty = "is_not_empty"
 }
