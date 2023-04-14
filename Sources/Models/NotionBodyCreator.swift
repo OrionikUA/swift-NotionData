@@ -164,6 +164,17 @@ public class NotionBodyCreator {
         return ["or": query]
     }
     
+    public static func createFormulaCheckboxPropertyFilter(name: String, query: String, value: Bool) -> [String: Any] {
+        return [ "property": name,
+                 "formula": [
+                    "checkbox":
+                       [
+                           query: value
+                       ]
+                 ]
+        ]
+    }
+    
     public static func createCheckboxPropertyFilter(name: String, query: String, value: Bool) -> [String: Any] {
         return [ "property": name,
                  "checkbox":
