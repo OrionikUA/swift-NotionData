@@ -13,9 +13,12 @@ public class NotionBodyCreator {
         return body
     }
     
-    public static func createDatabaseRecordAdd(databaseId: String, changes: [NotionDatabaseColumnChange]) -> [String: Any] {
+    public static func createDatabaseRecordAdd(databaseId: String, changes: [NotionDatabaseColumnChange], icon: PageIcon? = nil) -> [String: Any] {
         var body: [String: Any] = [:]
         body.merge(NotionBodyCreator.createParentDatabaseValue(databaseId: databaseId)) { (_, new) in new }
+        if let iconNotNil = icon {
+            body.merge(NotionBodyCreator.createPageIcon(icon: iconNotNil)) { (_, new) in new }
+        }
         var changesList: [[String: Any]] = []
         for change in changes {
             changesList.append(createDatabaseColumnChange(change: change))
@@ -52,6 +55,17 @@ public class NotionBodyCreator {
     
     public static func createParentDatabaseValue(databaseId: String) -> [String: Any] {
         return ["parent": createDattabaseIdValue(id: databaseId)]
+    }
+    
+    public static func createPageIcon(icon: PageIcon) -> [String: Any] {
+        switch icon {
+        case .emoji(value: let value):
+            return ["icon": ["type": "emoji", "emoji": value]]
+        case .url(value: let value):
+            return ["icon": ["type": "external", "external": ["url": value]] as [String : Any]]
+        case .internalName(value: let value):
+            return ["icon": ["type": "external", "external": ["url": "https://www.notion.so/icons/\(value).svg"]] as [String : Any]]
+        }
     }
     
     static func createDattabaseIdValue(id: String) -> [String: String] {
