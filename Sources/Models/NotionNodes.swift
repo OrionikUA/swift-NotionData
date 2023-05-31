@@ -44,4 +44,5 @@ public enum NotionNodes {
     public static let href = "href"
     public static let isEmpty = "is_empty"
     public static let isNotEmpty = "is_not_empty"
+    public static let cover = "cover"
 }

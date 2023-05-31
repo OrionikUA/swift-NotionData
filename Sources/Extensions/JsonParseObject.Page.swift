@@ -7,6 +7,23 @@ public extension JsonParseObject {
         return obj
     }
     
+    func parsePageConver(canBeNil: Bool = true) throws -> String {
+        if (canBeNil && (!self.hasProperty(name: NotionNodes.cover) || self.isNil(name: NotionNodes.cover))) {
+            return ""
+        }
+        let coverObj = try self.parseObject(name: NotionNodes.cover)
+        if (coverObj.hasProperty(name: NotionNodes.external)) {
+            let exteranl = try coverObj.parseObject(name: NotionNodes.external)
+            let url = try exteranl.parseString(name: NotionNodes.url)
+            return url
+        }
+        else { //(coverObj.hasProperty(name: NotionNodes.file))
+            let file = try coverObj.parseObject(name: NotionNodes.file)
+            let url = try file.parseString(name: NotionNodes.url)
+            return url
+        }
+    }
+    
     func parsePageEmogi(canBeNil: Bool = true) throws -> String {
         if (canBeNil && (!self.hasProperty(name: NotionNodes.icon) || self.isNil(name: NotionNodes.icon))) {
             return ""
