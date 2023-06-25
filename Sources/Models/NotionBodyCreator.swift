@@ -34,7 +34,7 @@ public class NotionBodyCreator {
         case .checkbox:
             obj = createDatabaseCheckbox(name: change.columnName, value: change.bool)
         case .title:
-            obj = createDatabaseTitle(name: change.columnName, value: change.text)
+            obj = createDatabaseTitle(name: change.columnName, value: change.text, url: change.url)
         case .text:
             obj = createDatabaseText(name: change.columnName, value: change.text)
         case .select:
@@ -80,12 +80,21 @@ public class NotionBodyCreator {
         return ["properties": tmp]
     }
     
-    public static func createDatabaseTitle(name: String, value: String) -> [String: Any] {
+    public static func createDatabaseTitle(name: String, value: String, url: String? = nil) -> [String: Any] {
+        
+        let urlObject: [String: Any]? = url != nil ? ["url": url!] : nil
+        
         return [name:
                     [
                         "title":
                             [
-                                ["text": ["content": value]]
+                                [
+                                    "text":
+                                    [
+                                        "content": value,
+                                        "link": urlObject
+                                    ] as [String : Any?]
+                                ]
                             ]
                     ]
         ]

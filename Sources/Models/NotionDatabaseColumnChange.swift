@@ -9,8 +9,9 @@ public struct NotionDatabaseColumnChange {
     public let bool: Bool
     public let arrayStr: [String]
     public let isNil: Bool
+    public let url: String?
     
-    public init(columnType: NotionDatabaseColumnType, columnName: String, text: String = "", integer: Int = 0, double: Double = 0.0, bool: Bool = false, arrayStr: [String] = [], isNil: Bool = false)
+    public init(columnType: NotionDatabaseColumnType, columnName: String, text: String = "", integer: Int = 0, double: Double = 0.0, bool: Bool = false, arrayStr: [String] = [], isNil: Bool = false, url: String? = nil)
     {
         self.columnType = columnType
         self.columnName = columnName
@@ -20,6 +21,7 @@ public struct NotionDatabaseColumnChange {
         self.bool = bool
         self.arrayStr = arrayStr
         self.isNil = isNil
+        self.url = url
     }
     
     public static func createRelations(columnName: String, value: [String] = []) -> NotionDatabaseColumnChange {
@@ -30,8 +32,8 @@ public struct NotionDatabaseColumnChange {
         return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.checkbox, columnName: columnName, bool: value)
     }
     
-    public static func createTitle(columnName: String, value: String) -> NotionDatabaseColumnChange {
-        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.title, columnName: columnName, text: value)
+    public static func createTitle(columnName: String, value: String, url: String? = nil) -> NotionDatabaseColumnChange {
+        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.title, columnName: columnName, text: value, url: url)
     }
     
     public static func createText(columnName: String, value: String) -> NotionDatabaseColumnChange {
