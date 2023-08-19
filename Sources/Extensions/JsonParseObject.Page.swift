@@ -37,6 +37,22 @@ public extension JsonParseObject {
         return emoji
     }
     
+    func parsePageInternalIcon(canBeNil: Bool = true) throws -> String {
+        if (canBeNil && (!self.hasProperty(name: NotionNodes.icon) || self.isNil(name: NotionNodes.icon))) {
+            return ""
+        }
+        let icon = try self.parseObject(name: NotionNodes.icon)
+        if (canBeNil && (!icon.hasProperty(name: NotionNodes.external) || icon.isNil(name: NotionNodes.external))) {
+            return ""
+        }
+        let exteranl = try icon.parseObject(name: NotionNodes.external)
+        if (canBeNil && (!icon.hasProperty(name: NotionNodes.url) || icon.isNil(name: NotionNodes.url))) {
+            return ""
+        }
+        let url = try exteranl.parseString(name: NotionNodes.url)
+        return url
+    }
+    
     func parsePageProperties() throws -> JsonParseObject {
         let properties = try self.parseObject(name: NotionNodes.properties)
         return properties
