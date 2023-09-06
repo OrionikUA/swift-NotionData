@@ -34,7 +34,11 @@ public class NotionBodyCreator {
         case .checkbox:
             obj = createDatabaseCheckbox(name: change.columnName, value: change.bool)
         case .title:
-            obj = createDatabaseTitle(name: change.columnName, value: change.text, url: change.url)
+            if let textUrl = change.textUrl {
+                obj = createDatabaseTitle(name: change.columnName, value: textUrl)
+            } else {
+                obj = createDatabaseTitle(name: change.columnName, value: change.text, url: change.url)
+            }
         case .text:
             obj = createDatabaseText(name: change.columnName, value: change.text)
         case .select:
@@ -90,12 +94,35 @@ public class NotionBodyCreator {
                             [
                                 [
                                     "text":
-                                    [
-                                        "content": value,
-                                        "link": urlObject
-                                    ] as [String : Any?]
+                                        [
+                                            "content": value,
+                                            "link": urlObject
+                                        ] as [String : Any?]
                                 ]
                             ]
+                    ]
+        ]
+    }
+    
+    public static func createDatabaseTitle(name: String, value: [(text: String, url: String?)]) -> [String: Any] {
+        
+        var textUrls: [[String: Any]] = []
+        
+        for item in value {
+            let urlObject: [String: Any]? = item.url != nil ? ["url": item.url!] : nil
+            let obj = [
+                "text":
+                    [
+                        "content": item.text,
+                        "link": urlObject
+                    ] as [String : Any?]
+            ]
+            textUrls.append(obj)
+        }
+        
+        return [name:
+                    [
+                        "title": textUrls
                     ]
         ]
     }
@@ -191,9 +218,9 @@ public class NotionBodyCreator {
         return [ "property": name,
                  "formula": [
                     "checkbox":
-                       [
-                           query: value
-                       ]
+                        [
+                            query: value
+                        ]
                  ]
         ]
     }

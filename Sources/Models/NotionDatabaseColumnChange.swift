@@ -10,8 +10,9 @@ public struct NotionDatabaseColumnChange {
     public let arrayStr: [String]
     public let isNil: Bool
     public let url: String?
+    public let textUrl: [(text: String, url: String?)]?
     
-    public init(columnType: NotionDatabaseColumnType, columnName: String, text: String = "", integer: Int = 0, double: Double = 0.0, bool: Bool = false, arrayStr: [String] = [], isNil: Bool = false, url: String? = nil)
+    public init(columnType: NotionDatabaseColumnType, columnName: String, text: String = "", integer: Int = 0, double: Double = 0.0, bool: Bool = false, arrayStr: [String] = [], isNil: Bool = false, url: String? = nil, textUrl: [(text: String, url: String?)]? = nil)
     {
         self.columnType = columnType
         self.columnName = columnName
@@ -22,6 +23,7 @@ public struct NotionDatabaseColumnChange {
         self.arrayStr = arrayStr
         self.isNil = isNil
         self.url = url
+        self.textUrl = textUrl
     }
     
     public static func createRelations(columnName: String, value: [String] = []) -> NotionDatabaseColumnChange {
@@ -34,6 +36,10 @@ public struct NotionDatabaseColumnChange {
     
     public static func createTitle(columnName: String, value: String, url: String? = nil) -> NotionDatabaseColumnChange {
         return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.title, columnName: columnName, text: value, url: url)
+    }
+    
+    public static func createTitle(columnName: String, value: [(text: String, url: String?)]) -> NotionDatabaseColumnChange {
+        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.title, columnName: columnName, textUrl: value)
     }
     
     public static func createText(columnName: String, value: String) -> NotionDatabaseColumnChange {
