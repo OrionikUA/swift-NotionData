@@ -2,6 +2,17 @@
 import Foundation
 
 public extension JsonParseObject {
+    func parseTitlesProperty(columnName: String) throws -> [String] {
+        let obj = try self.parseObject(name: columnName)
+        let titles = try obj.parseArray(name: NotionNodes.title)
+        var array: [String] = []
+        for title in titles {
+            let text = try title.parseString(name: NotionNodes.plainText)
+            array.append(text)
+        }
+        return array
+    }
+    
     func parseTitleProperty(columnName: String) throws -> String {
         let obj = try self.parseObject(name: columnName)
         let titles = try obj.parseArray(name: NotionNodes.title)
