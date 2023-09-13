@@ -45,6 +45,22 @@ public extension JsonParseObject {
         return dict
     }
     
+    func parseTitlesLinks(columnName: String) throws -> [(title: String, link: String?)] {
+        let obj = try self.parseObject(name: columnName)
+        let richTexts = try obj.parseArray(name: NotionNodes.title)
+        var array: [(String, String?)] = []
+        for richText in richTexts {
+            let text = try richText.parseString(name: NotionNodes.plainText)
+            if (!richText.isNil(name: NotionNodes.href)) {
+                let link = try richText.parseString(name: NotionNodes.href)
+                array.append((text, link))
+            } else {
+                array.append((text, nil))
+            }
+        }
+        return array
+    }
+    
     func parseTitleLinks(columnName: String) throws -> [String] {
         let obj = try self.parseObject(name: columnName)
         let richTexts = try obj.parseArray(name: NotionNodes.title)
