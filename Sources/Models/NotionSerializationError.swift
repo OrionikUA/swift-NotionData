@@ -1,6 +1,6 @@
 
 import Foundation
 
-enum NotionSerializationError: Error {
+public enum NotionSerializationError: Error {
     case missing(String)
 }
