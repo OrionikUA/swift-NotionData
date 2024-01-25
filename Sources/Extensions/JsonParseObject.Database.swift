@@ -180,6 +180,18 @@ public extension JsonParseObject {
         return value
     }
     
+    func parseSelectAsTextProperty(columnName: String, canBeNil: Bool = true) throws -> String? {
+        let obj = try self.parseObject(name: columnName)
+        if (canBeNil) {
+            if (obj.isNil(name: NotionNodes.select)) {
+                return nil
+            }
+        }
+        let select = try obj.parseObject(name: NotionNodes.select)
+        let name = try select.parseString(name: NotionNodes.name)
+        return name
+    }
+    
     func parseMultiSelectProperty<E: RawRepresentable>(columnName: String, minimumLength: Int = 0, maximumLength: Int = Int.max) throws -> [E] where E.RawValue == String {
         let obj = try self.parseObject(name: columnName)
         let multiSelect = try obj.parseArray(name: NotionNodes.multiSelect, minCount: minimumLength, maxCount: maximumLength)
