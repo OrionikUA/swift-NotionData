@@ -192,6 +192,24 @@ public extension JsonParseObject {
         return name
     }
     
+    func parseStatusProperty<E: RawRepresentable>(columnName: String) throws -> E where E.RawValue == String {
+        let obj = try self.parseObject(name: columnName)
+        let select = try obj.parseObject(name: NotionNodes.status)
+        let name = try select.parseString(name: NotionNodes.name)
+        guard let value = E(rawValue: name) else {
+            let path = select.path + [NotionNodes.name] + [name]
+            throw NotionSerializationError.missing(path.joined(separator: "."))
+        }
+        return value
+    }
+    
+    func parseStatusAsTextProperty(columnName: String) throws -> String {
+        let obj = try self.parseObject(name: columnName)
+        let select = try obj.parseObject(name: NotionNodes.status)
+        let name = try select.parseString(name: NotionNodes.name)
+        return name
+    }
+    
     func parseMultiSelectProperty<E: RawRepresentable>(columnName: String, minimumLength: Int = 0, maximumLength: Int = Int.max) throws -> [E] where E.RawValue == String {
         let obj = try self.parseObject(name: columnName)
         let multiSelect = try obj.parseArray(name: NotionNodes.multiSelect, minCount: minimumLength, maxCount: maximumLength)
