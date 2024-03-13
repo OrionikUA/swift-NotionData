@@ -53,6 +53,8 @@ public class NotionBodyCreator {
             obj = createDatabaseStartDate(name: change.columnName, value: change.isNil ? nil : change.text)
         case .relations:
             obj = createDatabaseReleations(name: change.columnName, value: change.arrayStr)
+        case .status:
+            obj = createDatabaseStatus(name: change.columnName, value: change.text)
         }
         return obj
     }

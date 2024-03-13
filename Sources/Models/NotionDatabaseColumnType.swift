@@ -11,4 +11,5 @@ public enum NotionDatabaseColumnType {
     case numberDouble
     case startDate
     case relations
+    case status
 }

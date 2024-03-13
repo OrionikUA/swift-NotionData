@@ -50,6 +50,10 @@ public struct NotionDatabaseColumnChange {
         return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.select, columnName: columnName, text: value != nil ? value! : "", isNil: value == nil)
     }
     
+    public static func createStatus(columnName: String, value: String) -> NotionDatabaseColumnChange {
+        return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.status, columnName: columnName, text: value, isNil: false)
+    }
+    
     public static func createMultiSelect(columnName: String, value: [String]) -> NotionDatabaseColumnChange {
         return NotionDatabaseColumnChange(columnType: NotionDatabaseColumnType.multiSelect, columnName: columnName, arrayStr: value)
     }
