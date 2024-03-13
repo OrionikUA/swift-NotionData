@@ -156,6 +156,14 @@ public class NotionBodyCreator {
         ]
     }
     
+    public static func createDatabaseStatus(name: String, value: String) -> [String: Any] {
+        return [name:
+                    [
+                        "status": ["name": value]
+                    ]
+        ]
+    }
+    
     public static func createDatabaseCheckbox(name: String, value: Bool) -> [String: Any] {
         return [name:
                     [
