@@ -291,6 +291,26 @@ public class NotionBodyCreator {
         ]
     }
     
+    public static func createIntPropertyFilter(name: String, query: String, number: Int) -> [String: Any] {
+        return [ 
+            "property": name,
+            "number": [
+                query: number
+            ]
+        ]
+    }
+    
+    public static func createFormulaIntPropertyFilter(name: String, query: String, number: Int) -> [String: Any] {
+        return [ "property": name,
+                 "formula":
+                    [
+                        "number": [
+                            query: number
+                        ]
+                    ]
+        ]
+    }
+    
     public static func createSort(query: [[String: Any]]) -> [String: Any] {
         return [ "sorts": query ]
     }
