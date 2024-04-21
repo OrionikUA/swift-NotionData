@@ -1,8 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by Ihor Popkov on 21.04.2024.
-//
-
 import Foundation
+
+public enum NotionContainerBlockType: String, CaseIterable {
+    case columnList = "column_list"
+    case column = "column"
+}
