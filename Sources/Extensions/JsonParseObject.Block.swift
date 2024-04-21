@@ -2,8 +2,8 @@ import Foundation
 
 public extension JsonParseObject {
     
-    func isBlockType(type: String) -> Bool {
-        self.hasProperty(name: NotionNodes.id) && self.hasProperty(name: type)
+    func isBlockType(type: String) throws -> Bool {
+        try self.hasProperty(name: NotionNodes.id) && self.hasProperty(name: NotionNodes.type) && self.parseString(name: NotionNodes.type) == type
     }
     
     func getContainerBlockId() throws -> String? {
@@ -13,7 +13,7 @@ public extension JsonParseObject {
         
         for type in NotionContainerBlockType.allCases {
             if (self.hasProperty(name: type.rawValue)) {
-                return try self.parseString(name: type.rawValue)
+                return try self.parseString(name: NotionNodes.id)
             }
         }
         
@@ -34,7 +34,7 @@ public extension Array where Element == JsonParseObject {
     }
     
     func filterByBlockType(type: String) throws -> [JsonParseObject] {
-        var array = self.filter({ $0.isBlockType(type: type) })
+        var array = try self.filter({ try $0.isBlockType(type: type) })
         return array
     }
 }
