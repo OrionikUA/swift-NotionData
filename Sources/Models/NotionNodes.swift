@@ -47,4 +47,5 @@ public enum NotionNodes {
     public static let cover = "cover"
     public static let childPage = "child_page"
     public static let type = "type"
+    public static let childDatabase = "child_database"
 }
