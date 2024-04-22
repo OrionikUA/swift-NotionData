@@ -72,7 +72,7 @@ public class NotionClient {
         return list
     }
     
-    public func sendPaginationGetRequest<T>(url: String, parser: (Any) throws -> [T]) async throws -> [T] {
+    public func sendPaginationGetRequest<T>(url: String, parser: (Any) throws -> T) async throws -> [T] {
         
         var list: [T] = []
         
@@ -86,7 +86,7 @@ public class NotionClient {
             let request = try self.createRequest(url: cursorUrl, httpMethod: HttpMethod.Get)
             let urlSession = URLSession.shared
 
-            var (data, _): (Data, URLResponse), json: Any, obj: [T]
+            var (data, _): (Data, URLResponse), json: Any, obj: T
             
             do { (data, _) = try await urlSession.data(for: request) }
             catch { throw NotionClientError.internalClientError(description: error.localizedDescription) }
@@ -105,7 +105,7 @@ public class NotionClient {
             catch NotionSerializationError.missing(let path) { throw NotionClientError.jsonParserError(description: path) }
             catch { throw NotionClientError.jsonParserError(description: error.localizedDescription) }
             
-            list.append(contentsOf: obj)
+            list.append(obj)
         } while (cursor != nil)
         
         return list
