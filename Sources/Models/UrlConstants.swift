@@ -8,4 +8,5 @@ public enum UrlConstants {
     public static func createPagesUrl(id: String) -> String { "\(pagesUrl)/\(id)" }
     public static func createDatabaseQueryUrl(databaseId: String) -> String { "\(databasesUrl)/\(databaseId)/query" }
     public static func createBlocksIdUrl(id: String) -> String { "\(blocksUrl)/\(id)" }
+    public static func createBlocksChildrenIdUrl(id: String) -> String { "\(createBlocksIdUrl(id: id))/children" }
 }

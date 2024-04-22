@@ -72,6 +72,45 @@ public class NotionClient {
         return list
     }
     
+    public func sendPaginationGetRequest<T>(url: String, parser: (Any) throws -> [T]) async throws -> [T] {
+        
+        var list: [T] = []
+        
+        var cursor: String? = nil
+        repeat {
+            var cursorUrl = url
+            if let cursorNotNil = cursor {
+                cursorUrl = url + "?start_cursor=\(cursorNotNil)"
+            }
+            
+            let request = try self.createRequest(url: cursorUrl, httpMethod: HttpMethod.Get)
+            let urlSession = URLSession.shared
+
+            var (data, _): (Data, URLResponse), json: Any, obj: [T]
+            
+            do { (data, _) = try await urlSession.data(for: request) }
+            catch { throw NotionClientError.internalClientError(description: error.localizedDescription) }
+            
+            do { json = try JSONSerialization.jsonObject(with: data, options: []) }
+            catch { throw NotionClientError.internalClientSerializationError(description: error.localizedDescription) }
+            
+            if let errorResponse = NotionClient.parseError(data: json) {
+                throw NotionClientError.errorResponse(description: errorResponse.description)
+            }
+            
+            do {
+                obj = try parser(json)
+                cursor = try NotionClient.parsePagination(data: json)
+            }
+            catch NotionSerializationError.missing(let path) { throw NotionClientError.jsonParserError(description: path) }
+            catch { throw NotionClientError.jsonParserError(description: error.localizedDescription) }
+            
+            list.append(contentsOf: obj)
+        } while (cursor != nil)
+        
+        return list
+    }
+    
     public func sendRequest<T>(url: String, parser: (Any) throws -> T, body: [String: Any]? = nil, httpMethod: HttpMethod = HttpMethod.Post) async throws -> T {
         let request = try self.createRequest(url: url, httpMethod: httpMethod, body: body)
         let urlSession = URLSession.shared
