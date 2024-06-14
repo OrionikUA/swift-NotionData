@@ -34,12 +34,12 @@ public extension Array where Element == JsonParseObject {
     }
     
     func filterByBlockType(type: String) throws -> [JsonParseObject] {
-        var array = try self.filter({ try $0.isBlockType(type: type) })
+        let array = try self.filter({ try $0.isBlockType(type: type) })
         return array
     }
     
     func filterByBlockType(types: [String]) throws -> [JsonParseObject] {
-        var array = try self.filter({ json in try types.contains(where: { type in try json.isBlockType(type: type) }) })
+        let array = try self.filter({ json in try types.contains(where: { type in try json.isBlockType(type: type) }) })
         return array
     }
 }

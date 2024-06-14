@@ -271,6 +271,15 @@ public class NotionBodyCreator {
         ]
     }
     
+    public static func createTextPropertyFilter<T>(name: String, type: String, query: String, obj: T) -> [String: Any] {
+        return [ "property": name,
+                 type:
+                    [
+                        query: obj
+                    ]
+        ]
+    }
+    
     public static func createBoolPropertyFilter(name: String, type: String, query: String, value: Bool) -> [String: Any] {
         return [ "property": name,
                  type:
