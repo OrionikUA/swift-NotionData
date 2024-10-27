@@ -41,6 +41,8 @@ public class NotionBodyCreator {
             }
         case .text:
             obj = createDatabaseText(name: change.columnName, value: change.text)
+        case .longText:
+            obj = createDatabaseLongText(name: change.columnName, value: change.text)
         case .select:
             obj = createDatabaseSelect(name: change.columnName, value: change.isNil ? nil : change.text)
         case .multiSelect:
@@ -136,6 +138,18 @@ public class NotionBodyCreator {
                             [
                                 ["text": ["content": value]]
                             ]
+                    ]
+        ]
+    }
+    
+    public static func createDatabaseLongText(name: String, value: String) -> [String: Any] {
+        
+        let array = value.splitStringIntoChunks(value, chunkSize: 2000)
+        let obj: [[String: Any]] = array.map({ ["text": ["content": $0]] as [String: Any] })
+        
+        return [name:
+                    [
+                        "rich_text":obj
                     ]
         ]
     }
@@ -319,6 +333,8 @@ public class NotionBodyCreator {
                     ]
         ]
     }
+    
+    
     
     public static func createSort(query: [[String: Any]]) -> [String: Any] {
         return [ "sorts": query ]

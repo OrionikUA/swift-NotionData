@@ -5,6 +5,7 @@ public enum NotionDatabaseColumnType {
     case checkbox
     case title
     case text
+    case longText
     case select
     case multiSelect
     case numberInt
