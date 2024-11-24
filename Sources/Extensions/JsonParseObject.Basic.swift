@@ -92,6 +92,21 @@ public extension JsonParseObject {
         return date
     }
     
+    func parseDateTime2(name property: String, timezone: TimeZone = TimeZone.current) throws -> Date {
+        let path = self.path + [property]
+        guard let text = self.obj[property] as? String else {
+            throw NotionSerializationError.missing(path.joined(separator: "."))
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter.timeZone = timezone
+        dateFormatter.locale = Locale.current
+        guard let date = dateFormatter.date(from:text) else {
+            throw NotionSerializationError.missing(path.joined(separator: "."))
+        }
+        return date
+    }
+    
     func parseDate(name property: String, timezone: TimeZone = TimeZone.current) throws -> Date {
         let path = self.path + [property]
         guard let text = self.obj[property] as? String else {
