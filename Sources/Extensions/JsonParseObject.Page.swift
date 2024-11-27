@@ -42,10 +42,10 @@ public extension JsonParseObject {
             return ""
         }
         let icon = try self.parseObject(name: NotionNodes.icon)
-        if (canBeNil && (!icon.hasProperty(name: NotionNodes.external) || icon.isNil(name: NotionNodes.external))) {
+        if (canBeNil && (!icon.hasProperty(name: NotionNodes.external) || icon.isNil(name: NotionNodes.external)) && (!icon.hasProperty(name: NotionNodes.file) || icon.isNil(name: NotionNodes.file))) {
             return ""
         }
-        let exteranl = try icon.parseObject(name: NotionNodes.external)
+        let exteranl = try icon.parseObject(name: icon.hasProperty(name: NotionNodes.external) ? NotionNodes.external : NotionNodes.file)
         if (canBeNil && (!icon.hasProperty(name: NotionNodes.url) || icon.isNil(name: NotionNodes.url))) {
             return ""
         }
