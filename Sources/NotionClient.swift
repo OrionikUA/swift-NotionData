@@ -32,7 +32,7 @@ public class NotionClient {
         return cursor
     }
     
-    public func sendPaginationPostRequest<T>(url: String, parser: (Any) throws -> [T], body: [String: Any]? = nil) async throws -> [T] {
+    public func sendPaginationPostRequest<T>(url: String, parser: @MainActor @Sendable (Any) throws -> [T], body: [String: Any]? = nil) async throws -> [T] {
         
         var list: [T] = []
         var newBody: [String: Any] = body ?? [:]
@@ -60,7 +60,7 @@ public class NotionClient {
             }
             
             do {
-                obj = try parser(json)
+                obj = try await parser(json)
                 cursor = try NotionClient.parsePagination(data: json)
             }
             catch NotionSerializationError.missing(let path) { throw NotionClientError.jsonParserError(description: path) }
@@ -72,7 +72,7 @@ public class NotionClient {
         return list
     }
     
-    public func sendPaginationGetRequest<T>(url: String, parser: (Any) throws -> T) async throws -> [T] {
+    public func sendPaginationGetRequest<T>(url: String, parser: @MainActor @Sendable (Any) throws -> T) async throws -> [T] {
         
         var list: [T] = []
         
@@ -99,7 +99,7 @@ public class NotionClient {
             }
             
             do {
-                obj = try parser(json)
+                obj = try await parser(json)
                 cursor = try NotionClient.parsePagination(data: json)
             }
             catch NotionSerializationError.missing(let path) { throw NotionClientError.jsonParserError(description: path) }
@@ -111,7 +111,7 @@ public class NotionClient {
         return list
     }
     
-    public func sendRequest<T>(url: String, parser: (Any) throws -> T, body: [String: Any]? = nil, httpMethod: HttpMethod = HttpMethod.Post) async throws -> T {
+    public func sendRequest<T>(url: String, parser: @MainActor @Sendable  (Any) throws -> T, body: [String: Any]? = nil, httpMethod: HttpMethod = HttpMethod.Post) async throws -> T {
         let request = try self.createRequest(url: url, httpMethod: httpMethod, body: body)
         let urlSession = URLSession.shared
 
@@ -127,7 +127,7 @@ public class NotionClient {
             throw NotionClientError.errorResponse(description: errorResponse.description)
         }
         
-        do { obj = try parser(json) }
+        do { obj = try await parser(json) }
         catch NotionSerializationError.missing(let path) { throw NotionClientError.jsonParserError(description: path) }
         catch { throw NotionClientError.jsonParserError(description: error.localizedDescription) }
 
