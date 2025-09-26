@@ -2,11 +2,11 @@
 
 import Foundation
 
-@available(iOS 15.0, macOS 12.0, *)
+@available(iOS 26.0, macOS 26.0, *)
 public class NotionClient {
     
     let timeout = 20.0
-    let version = "2022-02-22"    
+    let version = "2025-09-03"
     
     let token: String
     
