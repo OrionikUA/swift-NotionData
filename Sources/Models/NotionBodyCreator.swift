@@ -28,6 +28,21 @@ public class NotionBodyCreator {
         return body
     }
     
+    public static func createDataSourceRecordAdd(dataSourceId: String, changes: [NotionDatabaseColumnChange], icon: PageIcon? = nil) -> [String: Any] {
+        var body: [String: Any] = [:]
+        body.merge(NotionBodyCreator.createParentDataSourceValue(dataSourceId: dataSourceId)) { (_, new) in new }
+        if let iconNotNil = icon {
+            body.merge(NotionBodyCreator.createPageIcon(icon: iconNotNil)) { (_, new) in new }
+        }
+        var changesList: [[String: Any]] = []
+        for change in changes {
+            changesList.append(createDatabaseColumnChange(change: change))
+        }
+        let properties = createProperties(dict: changesList)
+        body.merge(properties) { (_, new) in new }
+        return body
+    }
+    
     public static func createDatabaseColumnChange(change: NotionDatabaseColumnChange) -> [String: Any] {
         var obj:[String: Any]
         switch (change.columnType) {
@@ -65,6 +80,10 @@ public class NotionBodyCreator {
         return ["parent": createDattabaseIdValue(id: databaseId)]
     }
     
+    public static func createParentDataSourceValue(dataSourceId: String) -> [String: Any] {
+        return ["parent": createDataSourceIdValue(id: dataSourceId)]
+    }
+    
     public static func createPageIcon(icon: PageIcon) -> [String: Any] {
         switch icon {
         case .emoji(value: let value):
@@ -78,6 +97,10 @@ public class NotionBodyCreator {
     
     static func createDattabaseIdValue(id: String) -> [String: String] {
         return ["database_id": id]
+    }
+    
+    static func createDataSourceIdValue(id: String) -> [String: String] {
+        return ["data_source_id": id]
     }
     
     public static func createProperties(dict: [[String: Any]]) -> [String: Any] {
