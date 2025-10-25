@@ -48,4 +48,8 @@ public enum NotionNodes {
     public static let childPage = "child_page"
     public static let type = "type"
     public static let childDatabase = "child_database"
+    public static let contains = "contains"
+    public static let doesNotContain = "does_not_contain"
+    public static let equals = "equals"
+    public static let doesNotEqual = "does_not_equal"
 }

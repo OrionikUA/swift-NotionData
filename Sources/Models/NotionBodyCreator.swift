@@ -334,7 +334,14 @@ public class NotionBodyCreator {
         ]
     }
     
-    
+    public static func createMultiSelectPropertyFilter(name: String, query: String, text: String) -> [String: Any] {
+        return [
+            "property": name,
+            "multi_select": [
+                query: text
+            ]
+        ]
+    }
     
     public static func createSort(query: [[String: Any]]) -> [String: Any] {
         return [ "sorts": query ]
